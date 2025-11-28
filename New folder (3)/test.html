@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mariners Onside</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Black', Arial, sans-serif;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        .top-bar {
+            background: linear-gradient(to bottom, #006400, #008000);
+            padding: 8px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        .top-bar a {
+            color: #fff;
+            margin: 0 12px;
+            text-decoration: none;
+        }
+        header {
+            background-color: #510400;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: url('logo.jpg') center/contain no-repeat;
+        }
+        .title {
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255,255,255,0.5), 3px 3px 6px rgba(0,0,0,0.8);
+        }
+        nav {
+            background-color: #111;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 25px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        nav a:hover {
+            color: #00ff00;
+        }
+        .hero {
+            position: relative;
+            height: 60vh;
+            background-image: url('Mariners Onside.jpg');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.3);
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.25);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-size: 90px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            text-shadow: 0 0 15px rgba(255,255,255,0.7), 5px 5px 15px rgba(0,0,0,0.9);
+            margin-bottom: 50px;
+        }
+        .membership-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .box {
+            background: rgba(0,0,0,0.8);
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,255,0,0.9), 0 0 60px rgba(0,255,0,0.6), 0 0 90px rgba(0,255,0,0.4), inset 0 0 20px rgba(0,255,0,0.2);
+            border: 2px solid rgba(0,255,0,0.8);
+            transition: all 0.3s ease;
+        }
+        .box:hover {
+            box-shadow: 0 0 40px rgba(0,255,0,1), 0 0 80px rgba(0,255,0,0.8), 0 0 120px rgba(0,255,0,0.6), inset 0 0 30px rgba(0,255,0,0.3);
+            border: 2px solid rgba(0,255,0,1);
+        }
+        .box h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0,255,0,0.6);
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .btn-green {
+            background: #008631;
+            color: white;
+        }
+        .btn-green:hover {
+            background: #1fd655;
+        }
+        .btn-red {
+            background: #8B0000;
+            color: white;
+        }
+        .btn-red:hover {
+            background: #A00000;
+        }
+        .price {
+            font-size: 18px;
+        }
+
+        .admin-panel {
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            width: 360px;
+            max-width: calc(100% - 40px);
+            background: rgba(10,10,10,0.95);
+            border: 2px solid rgba(255,255,255,0.06);
+            padding: 16px;
+            border-radius: 8px;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            z-index: 9999;
+            display: none;
+        }
+        .admin-panel.active { display: block; }
+        .admin-panel h2 { margin-bottom: 10px; font-size: 20px; }
+        .admin-panel textarea, .admin-panel input { width: 100%; padding:8px; margin-bottom:8px; border-radius:4px; border:1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color:#fff; }
+        .admin-panel button { padding:10px 12px; background:#008631; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+        .admin-panel .close-btn { background:#8B0000; margin-left:8px; }
+        .admin-note { font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:8px; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 60px; }
+            .membership-boxes { flex-direction: column; align-items: center; }
+            .box { width: 90%; }
+            .admin-panel { right: 10px; left: 10px; top: 60px; width: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        FOLLOW US 
+        <a href="https://www.facebook.com/share/17cesvqNoP/" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/marinersonsideofficial?igsh=MW94ZW03cnVhMnRzbA=="><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-telegram"></i></a>
+        <a href="#"><i class="fab fa-discord"></i></a>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo"></div>
+            <div class="title">MARINERS ONSIDE<br>Passion Finds Its Home</div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#">BLOG</a>
+        <a href="#">CHANTS</a>
+        <a href="#">TROPHIES</a>
+        <a href="#">STORE</a>
+        <a href="#" id="admin-link" style="color:#ffeb3b">ADMIN</a>
+    </nav>
+    <section class="hero">
+            <h1>JOIN US</h1>
+
+            <div class="membership-boxes">
+                <div class="box">
+                    <h3>MARINERS ONSIDE LADY MARINERS</h3>
+                    <a href="#" class="btn btn-green">CLICK HERE</a>
+                    <p class="price">FREE MEMBERSHIP</p>
+                </div>
+
+                <div class="box">
+                    <h3>MARINERS ONSIDE GENERAL MEMBERSHIP</h3>
+                    <a href="#" class="btn btn-red">CLICK HERE</a>
+                    <p class="price">YEARLY SUBSCRIPTION ₹149</p>
+                </div>
+                        </div>
+                </div>
+        </section>
+
+        <div id="admin-panel" class="admin-panel" aria-hidden="true">
+            <h2>Admin Desk</h2>
+            <p class="admin-note">Owner-only panel. Server-side auth is used (set <code>ADMIN_PASSWORD</code> as an env var on the server).</p>
+
+            <div id="admin-login">
+                <input id="admin-password" type="password" placeholder="Owner password" />
+                <div style="margin-top:8px"><button id="admin-login-btn">Login</button>
+                <button id="admin-close-login" class="close-btn" style="background:#444;margin-left:8px">Close</button></div>
+            </div>
+
+            <div id="admin-controls" style="display:none;">
+                <textarea id="announcement" rows="4" placeholder="Write announcement..."></textarea>
+                <div>
+                    <button id="post-announcement">Post</button>
+                    <button id="admin-logout" class="close-btn">Logout</button>
+                    <button id="admin-close" class="close-btn" style="background:#444;margin-left:8px">Close</button>
+                </div>
+                <hr style="margin:10px 0;border-color:rgba(255,255,255,0.06)" />
+                <div id="announcements-list"></div>
+            </div>
+        </div>
+
+        <script>
+        (function(){
+            const adminLink = document.getElementById('admin-link');
+            const adminPanel = document.getElementById('admin-panel');
+            const adminLogin = document.getElementById('admin-login');
+            const adminControls = document.getElementById('admin-controls');
+            const adminClose = document.getElementById('admin-close');
+            const adminCloseLogin = document.getElementById('admin-close-login');
+            const loginBtn = document.getElementById('admin-login-btn');
+            const logoutBtn = document.getElementById('admin-logout');
+            const postBtn = document.getElementById('post-announcement');
+            const announcementInput = document.getElementById('announcement');
+            const announcementList = document.getElementById('announcements-list');
+            const adminPassword = document.getElementById('admin-password');
+
+            function showPanel() { adminPanel.classList.add('active'); adminPanel.setAttribute('aria-hidden','false'); }
+            function hidePanel() { adminPanel.classList.remove('active'); adminPanel.setAttribute('aria-hidden','true'); }
+
+            async function fetchAnnouncements(){
+                try{
+                    const res = await fetch('/api/announcements', { credentials: 'same-origin' });
+                    const data = await res.json();
+                    renderAnnouncements(data.announcements || []);
+                }catch(e){ console.error(e); }
+            }
+
+            function renderAnnouncements(items){
+                announcementList.innerHTML = '';
+                if (!items.length) { announcementList.innerHTML = '<div style="color:rgba(255,255,255,0.6)">No announcements</div>'; return; }
+                items.forEach(item => {
+                    const el = document.createElement('div');
+                    el.style.padding = '8px';
+                    el.style.marginBottom = '8px';
+                    el.style.border = '1px solid rgba(255,255,255,0.06)';
+                    const time = new Date(item.createdAt).toLocaleString();
+                    el.innerHTML = `<div style="font-size:13px;color:rgba(255,255,255,0.7)">${time}</div><div style="margin-top:6px">${escapeHtml(item.text)}</div>`;
+                    announcementList.appendChild(el);
+                });
+            }
+
+            function escapeHtml(str){ return String(str).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+            fetchAnnouncements();
+
+            adminLink && adminLink.addEventListener('click', function(e){
+                e.preventDefault();
+                if (adminPanel.classList.contains('active')) { hidePanel(); return; }
+                showPanel();
+            });
+
+            adminCloseLogin && adminCloseLogin.addEventListener('click', hidePanel);
+            adminClose && adminClose.addEventListener('click', hidePanel);
+
+            loginBtn && loginBtn.addEventListener('click', async function(){
+                const pw = adminPassword.value || '';
+                try{
+                    const res = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({ password: pw })
+                    });
+                    if (!res.ok) throw new Error('Login failed');
+                    // show controls
+                    adminLogin.style.display = 'none';
+                    adminControls.style.display = 'block';
+                    adminPassword.value = '';
+                    fetchAnnouncements();
+                }catch(err){
+                    alert('Login failed');
+                }
+            });
+
+            logoutBtn && logoutBtn.addEventListener('click', async function(){
+                try{
+                    await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+                }catch(e){ }
+                adminControls.style.display = 'none';
+                adminLogin.style.display = 'block';
+            });
+
+            postBtn && postBtn.addEventListener('click', async function(){
+                const text = (announcementInput.value || '').trim();
+                if (!text) return alert('Enter announcement');
+                try{
+                    const res = await fetch('/api/announcements', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({ text })
+                    });
+                    if (!res.ok) throw new Error('Post failed');
+                    announcementInput.value = '';
+                    fetchAnnouncements();
+                }catch(err){
+                    alert('Failed to post announcement (are you logged in as owner?)');
+                }
+            });
+        })();
+        </script>
+</body>
+</html>
